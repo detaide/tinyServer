@@ -4,6 +4,7 @@ import { DemoPath } from "./demo";
 import { PathLoad } from "@/Utils";
 import path from "path";
 import Loging from "@/Log/log";
+import bodyParser from "koa-bodyparser";
 
 
 
@@ -80,7 +81,16 @@ async function useRouter(app :Application) : Promise<Router<any, {}>>
     let router = RouterManager.getRouter();
 
     //使用路由
-    await app.use(router.routes())
+    await app
+    .use(bodyParser({
+        enableTypes : ["json"],
+        strict : true,
+        jsonLimit : '10mb',
+        onerror: function (err, ctx) {
+            ctx.throw('body parse error', 422);
+        }
+    }))
+    .use(router.routes())
     .use(router.allowedMethods());
 
     await PathLoad(path.resolve(__dirname))
@@ -94,8 +104,14 @@ export async function useResponseHandler(app :Application) {
         try{
             await next();
 
-            if(ctx.body === undefined)  return;
-
+            if(ctx.body === undefined)  {
+                ctx.body = {
+                    code : 404,
+                    reason : `${ctx.request.path} not found`
+                }
+                return ;
+            };
+            
             ctx.body = {
                 code : 200,
                 message : "success",
