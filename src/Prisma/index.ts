@@ -1,5 +1,5 @@
 import Application from "koa";
-import {PrismaClient} from "@prisma/client";
+import {Login, Prisma, PrismaClient} from "@prisma/client";
 import { tbDemo } from "@prisma/client";
 import * as runtime from '@prisma/client/runtime/library';
 import { ResponseBody } from "@/Router";
@@ -9,8 +9,6 @@ let prisma = new PrismaClient();
 
 export default class PrismaManager
 {
-
-
     public static getPrisma()
     {
         if(!prisma)
@@ -35,7 +33,11 @@ export default class PrismaManager
         responseBody? : ResponseBody
     )
     {
-        return await callback.bind(null, PrismaManager.getPrisma(), responseBody)()
+        return PrismaManager.getPrisma().$transaction( async () =>
+        {
+            console.log("translation start")
+            return await callback.bind(null, PrismaManager.getPrisma(), responseBody)()
+        })
         .then(() =>
         {
             return true;
@@ -45,6 +47,24 @@ export default class PrismaManager
             responseBody?.setResponseReason(err.message);
             return false;
         })
+        .finally(() =>
+        {
+            console.log("translation end")
+        })
     }
+
+
+    public static async execute<T = any>(sql : string) : Promise<T | void>
+    {
+        console.log("querySQL : ", sql)
+        return await PrismaManager.getPrisma().$queryRawUnsafe<T>(sql);
+    }
+
+    public static async QueryFirst<T extends any | void = any> (sql : string)
+    {
+        let sqlResult =  await PrismaManager.getPrisma().$queryRawUnsafe<T>(sql);
+        return sqlResult instanceof Array ? sqlResult[0] : sqlResult;
+    }
+
 
 }

@@ -1,7 +1,7 @@
 import Application, { ParameterizedContext } from "koa";
 import Router from "koa-router"
 import { DemoPath } from "./demo";
-import { PathLoad } from "@/Utils";
+import tools from "@/Utils";
 import path from "path";
 import Loging from "@/Log/log";
 import bodyParser from "koa-bodyparser";
@@ -93,7 +93,7 @@ async function useRouter(app :Application) : Promise<Router<any, {}>>
     .use(router.routes())
     .use(router.allowedMethods());
 
-    await PathLoad(path.resolve(__dirname))
+    await tools.general.PathLoad(path.resolve(__dirname))
 
     return router;
 }

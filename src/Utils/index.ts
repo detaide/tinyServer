@@ -1,36 +1,67 @@
-import fs from "fs"
-import path from "path"
-export function PathLoad(dirPath : string)
-{
-    const files = fs.readdirSync(dirPath);
 
-    if(!files.length)
-        throw new Error(`Path ${dirPath} doesn't exist Files`)
 
-    console.log("PathLoad : ", dirPath);
+// const modules = import.meta.glob('./**/*.ts')
+// let api : any = {}
+// async function loadModule() {
+//     for (const [path, module] of Object.entries(modules)) {
+//       const list = await module() as any
+//       for (const key in list) {
+//         api[key] = list[key]
+//       }
+//     }
+//   }
+// await loadModule()
+// export  {api}
 
-    files.forEach(async file =>
-        {
-            if(file === "index.ts")
-            {
-                return;
-            }
 
-            const filePath = path.join(dirPath, file)
-            const func = require(filePath)
+// 丢失泛型
+// import fs from "fs";
+// import path from "path";
 
-            if(func)
-            {
-                for(let moduleName in func)
-                {
-                    await func[moduleName]();
-                }
-            }
+// let tools : {[key : string] : any} = {};
 
-        })
-}
+// export async function loadModules()
+// {
+//     const files = await fs.readdirSync(__dirname);
+//     files.forEach(async file =>
+//     {
+//         loadModule(path.join(__dirname, file)); 
+//     })
+// }
 
-export function ConvertData<T = any>(data : any) : T
-{
-    return data as unknown as T
+// async function loadModule(modulePath : string) 
+// {
+//     if(fs.statSync(modulePath).isDirectory())
+//     {
+//         fs.readdirSync(modulePath).forEach(async (file) =>
+//         {
+//             return await loadModule(path.join(modulePath, file));
+//         })
+//     }
+
+//     if(path.extname(modulePath) === ".ts")
+//     {
+//         const module = await import(modulePath);
+
+//         for(const key of module)
+//         {
+//             tools[key] = <T>(...args : any) => module[key] as any as T;
+//         }
+//     }
+// }
+
+// loadModules()
+
+// export {
+//     tools
+// }
+
+import * as general from "./general";
+import * as Time from "./Time";
+import * as Data from "./Data"
+
+export default {
+    general,
+    Time,
+    Data
 }

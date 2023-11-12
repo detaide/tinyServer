@@ -1,6 +1,7 @@
 import { Login } from "@prisma/client";
 import RouterManager, { ResponseBody } from ".";
-import { ConvertData } from "@/Utils";
+// import { ConvertData } from "@/Utils";
+import tools  from "@/Utils";
 import LoginManager from "@/Server/Login";
 import Loging from "@/Log/log";
 
@@ -12,7 +13,7 @@ export async function LoginPath()
     {
         let responseBody = new ResponseBody();
         // console.log(ctx.query)
-        let loginMsg = ConvertData<Login>(ctx.request.body)
+        let loginMsg = tools.Data.ConvertData<Login>(ctx.request.body)
         if(!loginMsg.username || !loginMsg.password)
         {
             responseBody.setResponseReason("username or password is empty");
@@ -29,7 +30,7 @@ export async function LoginPath()
     await router.post("/register", async (ctx) =>
     {
         let responseBody = new ResponseBody();
-        let loginMsg = ConvertData<Login>(ctx.request.body)
+        let loginMsg = tools.Data.ConvertData<Login>(ctx.request.body)
         if(!loginMsg.username || !loginMsg.password)
         {
             // return RouterManager.Response(ctx, {code : 1101, reason : "username or password unexists"});

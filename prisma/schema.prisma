@@ -20,7 +20,7 @@ model Login {
   id Int @id @default(autoincrement())
   username String @unique
   password String
-  register_time Int
-  login_time  Int
-  update_time Int
+  register_time BigInt
+  login_time  BigInt
+  update_time BigInt
 }

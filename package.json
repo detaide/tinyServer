@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "ts-node-dev -r tsconfig-paths/register --respawn ./src/index.ts  --file"
+    "start": "ts-node-dev -r tsconfig-paths/register --respawn ./src/index.ts  --file",
+    "generate" : "npx prisma generate"
   },
   "keywords": [],
   "author": "",

@@ -1,7 +1,7 @@
 import Koa from "koa";
 import {useLog} from "@/Log/log"
 import {useResponseHandler, useRouter} from "@/Router/index"
-import Demo from "@/Server/Demo"
+import "@/Global/TypeSupport"
 
 async function Bootstrap() {
     const app = new Koa();
@@ -18,11 +18,10 @@ async function Bootstrap() {
         console.log("3000 port listening...")
     })
 
-
 }
 
 
-Bootstrap()
+Bootstrap();
 
 
 

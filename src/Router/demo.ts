@@ -1,4 +1,6 @@
+import PrismaManager from "@/Prisma";
 import RouterManager from ".";
+import { Login } from "@prisma/client";
 
 export function DemoPath()
 {
@@ -12,5 +14,11 @@ export function DemoPath()
     router.get("/demo", (ctx) =>
     {
         ctx.body = " this is a demo";
+    })
+
+    router.get("/queryRow", async (ctx) =>
+    {
+        let ret = await PrismaManager.QueryFirst<Login>(`select * from login`);
+        ctx.body = ret;
     })
 }
