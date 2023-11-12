@@ -22,3 +22,9 @@
 		--xxx.ts			// 提供实际的路由处理函数
 ```
 
+运行
+```
+npm install
+npx prisma generate
+npm run start
+```
